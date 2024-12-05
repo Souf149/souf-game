@@ -23,7 +23,9 @@ class Bot(commands.Bot):
         print(
             f"Message:\t{message.author.id}\t{message.author.display_name}\t{message.content}"
         )
-        self.db_connection.new_message_from_user(message.author.id)
+        self.db_connection.new_message_from_user(
+            message.author.id, message.author.display_name
+        )
         await self.handle_commands(message)
 
     @commands.command()
