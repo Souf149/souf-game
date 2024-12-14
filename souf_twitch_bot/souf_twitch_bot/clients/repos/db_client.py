@@ -52,3 +52,28 @@ class DbClient(DbClientInterface):
             (user_id, username, 1, datetime.now().strftime(DATE_FORMAT)),
         )
         self._connection.commit()
+
+    def get_top_3_players(self):
+        cursor = self._connection.cursor()
+
+        cursor.execute("""
+            SELECT username, score FROM players
+            ORDER BY score DESC
+            LIMIT 3;
+        """)
+        return cursor.fetchall()
+
+    def get_score_of_player(self, id: str):
+        cursor = self._connection.cursor()
+
+        cursor.execute(
+            """
+            SELECT score FROM players
+            WHERE user_id = ?     
+                       """,
+            (id,),
+        )
+
+        result = cursor.fetchone()
+
+        print(result) # TODO: FIX THIS

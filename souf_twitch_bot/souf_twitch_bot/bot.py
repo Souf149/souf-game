@@ -29,12 +29,25 @@ class Bot(commands.Bot):
         await self.handle_commands(message)
 
     @commands.command()
-    async def score(self, ctx: commands.Context):
-        # Here we have a command hello, we can invoke our command with our prefix and command name
-        # e.g ?hello
-        # We can also give our commands aliases (different names) to invoke with.
+    async def top(self, ctx: commands.Context):
+        leaderboard_msg = "Leaderboard 🔥 | "
+        for player_score in self.db_connection.get_top_3_players():
+            leaderboard_msg += f"{player_score[0]}: {player_score[1]} --"
 
-        # Send a hello back!
-        # Sending a reply back to the channel is easy... Below is an example.
-        # await ctx.send(f"Hello {ctx.author.name}!")
-        await ctx.send(f"Souf is the better lidia")
+        await ctx.send(leaderboard_msg)
+
+    @commands.command()
+    async def score(self, ctx: commands.Context):
+        leaderboard_msg = "Leaderboard 🔥 | "
+        for player_score in self.db_connection.get_score_of_player():
+            leaderboard_msg += f"{player_score[0]}: {player_score[1]} --"
+
+        await ctx.send(leaderboard_msg)
+
+    @commands.command()
+    async def ryan(self, ctx: commands.Context):
+        await ctx.send("Rayan is kkr cool")
+
+    @commands.command()
+    async def dragon(self, ctx: commands.Context):
+        await ctx.send("Aashir is washed")
