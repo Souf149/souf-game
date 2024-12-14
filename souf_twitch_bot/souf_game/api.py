@@ -26,9 +26,9 @@ game = Game()
 
 class MessageEvent(BaseModel):
     message: str
-    user_name: str
+    username: str
 
 
 @api.app.post("/message", status_code=200)
 def new_message(messageEvent: MessageEvent) -> None:
-    game.new_message(messageEvent.message, messageEvent.user_name)
+    game.new_message(messageEvent.message, messageEvent.username)

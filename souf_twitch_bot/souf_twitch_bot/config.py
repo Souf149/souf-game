@@ -1,4 +1,4 @@
-from pydantic import Field
+from pydantic import Field, HttpUrl
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -9,7 +9,9 @@ class Settings(BaseSettings):
 
     client_id: str
 
-    model_config = SettingsConfigDict(env_file=".env")
+    game_api: HttpUrl
+
+    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
 
 settings = Settings()  # type: ignore

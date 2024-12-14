@@ -1,12 +1,13 @@
 from twitchio.ext import commands  # type: ignore
 from souf_twitch_bot.clients.repos.db_client import DbClient
+from souf_twitch_bot.clients.repos.game_client import GameClient
 from souf_twitch_bot.config import settings
 
 
 class Bot(commands.Bot):
     def __init__(self):
         self.db_connection = DbClient()
-
+        self.game_connection = GameClient()
         super().__init__(
             token=settings.access_token,
             prefix="souf ",
@@ -19,6 +20,13 @@ class Bot(commands.Bot):
     async def event_message(self, message):
         if message.echo:
             return
+
+        try:
+            self.game_connection.new_message_from_user(
+                message.content, message.author.display_name
+            )
+        except:
+            print("ERROR WITH SENDING MSG TO GAME")
 
         print(
             f"Message:\t{message.author.id}\t{message.author.display_name}\t{message.content}"
