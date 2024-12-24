@@ -53,13 +53,13 @@ class DbClient(DbClientInterface):
         )
         self._connection.commit()
 
-    def get_top_3_players(self):
+    def get_top_5_players(self):
         cursor = self._connection.cursor()
 
         cursor.execute("""
             SELECT username, score FROM players
             ORDER BY score DESC
-            LIMIT 3;
+            LIMIT 5;
         """)
         return cursor.fetchall()
 

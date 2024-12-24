@@ -18,6 +18,6 @@ class GameClient(GameClientInterface):
         response = self._session.post(
             "/message",
             content=MessageEvent(message=message, username=username).model_dump_json(),
-            timeout=3,
+            timeout=0.5,
         )
         response.raise_for_status()

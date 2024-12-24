@@ -39,7 +39,7 @@ class Bot(commands.Bot):
     @commands.command()
     async def top(self, ctx: commands.Context):
         leaderboard_msg = "Leaderboard 🔥 | "
-        for player_score in self.db_connection.get_top_3_players():
+        for player_score in self.db_connection.get_top_5_players():
             leaderboard_msg += f"{player_score[0]}: {player_score[1]} --"
 
         await ctx.send(leaderboard_msg)
@@ -54,7 +54,7 @@ class Bot(commands.Bot):
 
     @commands.command()
     async def ryan(self, ctx: commands.Context):
-        await ctx.send("Rayan is kkr cool")
+        await ctx.send("Ryan is kkr nep")
 
     @commands.command()
     async def dragon(self, ctx: commands.Context):
