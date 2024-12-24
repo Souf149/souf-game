@@ -46,11 +46,9 @@ class Bot(commands.Bot):
 
     @commands.command()
     async def score(self, ctx: commands.Context):
-        leaderboard_msg = "Leaderboard 🔥 | "
-        for player_score in self.db_connection.get_score_of_player():
-            leaderboard_msg += f"{player_score[0]}: {player_score[1]} --"
+        player_score = self.db_connection.get_score_of_player(ctx.author.id)
 
-        await ctx.send(leaderboard_msg)
+        await ctx.send(f"{ctx.author.name}'s score is {player_score}")
 
     @commands.command()
     async def ryan(self, ctx: commands.Context):

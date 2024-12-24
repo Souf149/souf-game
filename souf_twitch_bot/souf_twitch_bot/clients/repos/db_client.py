@@ -63,7 +63,7 @@ class DbClient(DbClientInterface):
         """)
         return cursor.fetchall()
 
-    def get_score_of_player(self, id: str):
+    def get_score_of_player(self, id: str) -> int:
         cursor = self._connection.cursor()
 
         cursor.execute(
@@ -76,4 +76,4 @@ class DbClient(DbClientInterface):
 
         result = cursor.fetchone()
 
-        print(result) # TODO: FIX THIS
+        return result[0] if result is not None else 0
