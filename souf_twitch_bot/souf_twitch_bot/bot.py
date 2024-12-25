@@ -21,13 +21,6 @@ class Bot(commands.Bot):
         if message.echo:
             return
 
-        try:
-            self.game_connection.new_message_from_user(
-                message.content, message.author.display_name
-            )
-        except:
-            print("ERROR WITH SENDING MSG TO GAME")
-
         print(
             f"Message:\t{message.author.id}\t{message.author.display_name}\t{message.content}"
         )

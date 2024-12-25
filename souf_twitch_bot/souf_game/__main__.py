@@ -1,4 +1,3 @@
-from souf_game.api import api
 from souf_game.config import settings
 
 
