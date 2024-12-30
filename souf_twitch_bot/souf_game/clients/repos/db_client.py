@@ -1,5 +1,4 @@
-from datetime import datetime, timedelta
-from souf_twitch_bot.clients.interfaces.db_client_interface import DbClientInterface
+from souf_game.clients.interfaces.db_client_interface import DbClientInterface
 import sqlite3
 
 DATE_FORMAT = "%Y-%m-%d %H:%M:%S"

@@ -11,7 +11,7 @@ class Bot(commands.Bot):
         super().__init__(
             token=settings.access_token,
             prefix="souf ",
-            initial_channels=["metabyte149", "faccboii", "csc14"],
+            initial_channels=["metabyte149"],
         )
 
     async def event_ready(self):

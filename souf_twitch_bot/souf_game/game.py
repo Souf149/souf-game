@@ -4,7 +4,7 @@ import random
 
 
 class Player:
-    def __init__(self, name: str, color: pygame.Color, x: int, y: int):
+    def __init__(self, name: str, color: tuple, x: int, y: int):
         self.name = name
         self.color = color
         self.size = 50
@@ -25,6 +25,18 @@ class Game:
 
         self.WIDTH = 1500
         self.HEIGHT = 300
+        self.FPS = 60
+        self.COLORS = [
+            (255, 84, 0, 255),
+            (0, 255, 12, 255),
+            (255, 246, 0, 255),
+            (0, 255, 187, 255),
+            (0, 255, 246, 255),
+            (0, 33, 255, 255),
+            (0, 255, 178, 255),
+            (144, 255, 0, 255),
+            (255, 136, 0, 255),
+        ]
 
         self.players = []
 
@@ -34,8 +46,7 @@ class Game:
         self.font = pygame.font.SysFont("inkfree", 30, italic=True, bold=True)
         self.font.set_underline(True)
 
-        for i in range(100):
-            self._chat_message("player" + str(random.randint(1, 3)))
+        self.frame_count = 0
 
     def run(self) -> None:
         while True:
@@ -43,10 +54,10 @@ class Game:
                 if event.type == pygame.QUIT:
                     pygame.quit()
 
-            self.screen.fill((100, 100, 100))
+            self.screen.fill((202, 42, 202, 255))
 
-            if random.randint(1, 60) == 1:
-                self._chat_message("player" + str(random.randint(1, 5)))
+            if self.frame_count % 60 == 0:
+                self._update_players()
 
             for i, player in enumerate(self.players):
                 text = self.font.render(player.name, True, (255, 255, 255))
@@ -55,7 +66,6 @@ class Game:
                 self.screen.blit(text, textrect)
                 player.lifetime += 1
                 player.timer += 1
-                print(player.lifetime)
 
                 if player.lifetime >= 200:  # 18000
                     self.players.pop(i)
@@ -93,11 +103,9 @@ class Game:
                     if player.walkw:
                         player.x -= 1
 
-                    if player.stil:
-                        print(player.name, "is standing still")
-
             pygame.display.flip()
-            self.clock.tick(60)
+            self.frame_count += 1
+            self.clock.tick(self.FPS)
 
     def _chat_message(self, player_name: str) -> None:
         print("Message from: " + player_name)
@@ -115,12 +123,12 @@ class Game:
         else:
             potential_players[0].lifetime = 0
 
-    def _get_random_hsv(self) -> pygame.Color:
-        c = pygame.Color(0, 0, 0)
-        c.hsva = (random.randint(0, 255), 100, 100, 100)
-        return c
+    def _get_random_hsv(self) -> tuple[int, int, int, int]:
+        return random.choice(self.COLORS)
 
-
-if __name__ == "__main__":
-    g = Game()
-    g.run()
+    def _update_players(self) -> None:
+        print("Updating players")
+        names = self.db_client.get_last_minute_users()
+        print(names)
+        for name in names:
+            self._chat_message(name)
