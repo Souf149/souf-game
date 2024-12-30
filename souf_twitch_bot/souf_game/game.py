@@ -16,6 +16,41 @@ class Player:
         self.walkw = False
         self.stil = False
 
+    def update(self, screen_width: int, screen_height: int) -> None:
+        self.lifetime += 1
+        self.timer += 1
+
+        if self.timer >= random.randint(100, 200):
+            r = random.randint(1, 3)
+            if r == 1 and not self.x >= screen_width * 0.8:
+                self.walko = True
+            else:
+                self.walko = False
+            if r == 2 and not self.x <= screen_width * 0.1:
+                self.walkw = True
+            else:
+                self.walkw = False
+            if r == 3:
+                self.stil = True
+            else:
+                self.stil = False
+
+            self.timer = 0
+
+        x = screen_height - self.size
+        if self.y != x:
+            self.y += 1
+
+        if self.y == screen_height - self.size:
+            if self.walko:
+                self.x += 1
+
+            if self.walkw:
+                self.x -= 1
+
+    def draw(self, screen):
+        pygame.draw.rect(screen, self.color, (self.x, self.y, self.size, self.size))
+
 
 class Game:
     players: list[Player]
@@ -51,8 +86,14 @@ class Game:
     def run(self) -> None:
         while True:
             for event in pygame.event.get():
-                if event.type == pygame.QUIT:
+                if event.type == pygame.QUIT or (
+                    event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE
+                ):
                     pygame.quit()
+
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_a:
+                        self._chat_message("Aashir")
 
             self.screen.fill((202, 42, 202, 255))
 
@@ -64,44 +105,12 @@ class Game:
                 textrect = text.get_rect()
                 textrect.center = (player.x + 10, player.y - 25)
                 self.screen.blit(text, textrect)
-                player.lifetime += 1
-                player.timer += 1
 
                 if player.lifetime >= 200:  # 18000
                     self.players.pop(i)
 
-                if player.timer >= random.randint(100, 200):
-                    r = random.randint(1, 3)
-                    if r == 1 and not player.x >= self.WIDTH * 0.8:
-                        player.walko = True
-                    else:
-                        player.walko = False
-                    if r == 2 and not player.x <= self.WIDTH * 0.1:
-                        player.walkw = True
-                    else:
-                        player.walkw = False
-                    if r == 3:
-                        player.stil = True
-                    else:
-                        player.stil = False
-
-                    player.timer = 0
-
-                pygame.draw.rect(
-                    self.screen,
-                    player.color,
-                    (player.x, player.y, player.size, player.size),
-                )
-                x = self.HEIGHT - player.size
-                if player.y != x:
-                    player.y += 1
-
-                if player.y == self.HEIGHT - player.size:
-                    if player.walko:
-                        player.x += 1
-
-                    if player.walkw:
-                        player.x -= 1
+                player.update(self.WIDTH, self.HEIGHT)
+                player.draw(self.screen)
 
             pygame.display.flip()
             self.frame_count += 1
