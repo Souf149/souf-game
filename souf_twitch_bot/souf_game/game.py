@@ -1,6 +1,46 @@
+from enum import Enum
 from souf_game.clients.repos.db_client import DbClient
 import pygame
 import random
+
+
+class Status(Enum):
+    IDLE = 1
+    WALKO = 2
+    WALKW = 3
+
+
+images = {
+    "ice_kirby": {
+        Status.IDLE: [
+            pygame.image.load("./souf_game/assets/ice_kirby/idle_0.png"),
+            pygame.image.load("./souf_game/assets/ice_kirby/idle_0.png"),
+            pygame.image.load("./souf_game/assets/ice_kirby/idle_0.png"),
+            pygame.image.load("./souf_game/assets/ice_kirby/idle_0.png"),
+            pygame.image.load("./souf_game/assets/ice_kirby/idle_0.png"),
+            pygame.image.load("./souf_game/assets/ice_kirby/idle_1.png"),
+            pygame.image.load("./souf_game/assets/ice_kirby/idle_1.png"),
+            pygame.image.load("./souf_game/assets/ice_kirby/idle_1.png"),
+            pygame.image.load("./souf_game/assets/ice_kirby/idle_1.png"),
+            pygame.image.load("./souf_game/assets/ice_kirby/idle_1.png"),
+            pygame.image.load("./souf_game/assets/ice_kirby/idle_1.png"),
+        ],
+        Status.WALKO: [
+            pygame.image.load("./souf_game/assets/ice_kirby/walk_0.png"),
+            pygame.image.load("./souf_game/assets/ice_kirby/walk_1.png"),
+            pygame.image.load("./souf_game/assets/ice_kirby/walk_2.png"),
+            pygame.image.load("./souf_game/assets/ice_kirby/walk_3.png"),
+            pygame.image.load("./souf_game/assets/ice_kirby/walk_4.png"),
+        ],
+        Status.WALKW: [
+            pygame.image.load("./souf_game/assets/ice_kirby/walk_0.png"),
+            pygame.image.load("./souf_game/assets/ice_kirby/walk_1.png"),
+            pygame.image.load("./souf_game/assets/ice_kirby/walk_2.png"),
+            pygame.image.load("./souf_game/assets/ice_kirby/walk_3.png"),
+            pygame.image.load("./souf_game/assets/ice_kirby/walk_4.png"),
+        ],
+    }
+}
 
 
 class Player:
@@ -12,28 +52,25 @@ class Player:
         self.y = y
         self.timer = 0
         self.lifetime = 0
-        self.walko = False
-        self.walkw = False
-        self.stil = False
+        self.status = Status.IDLE
+        self.frameCount = 0
 
     def update(self, screen_width: int, screen_height: int) -> None:
         self.lifetime += 1
         self.timer += 1
 
+        if self.timer % 10 == 0:
+            self.frameCount += 1
+
         if self.timer >= random.randint(100, 200):
-            r = random.randint(1, 3)
+            r = random.randint(1, 8)
+            self.frameCount = 0
             if r == 1 and not self.x >= screen_width * 0.8:
-                self.walko = True
+                self.status = Status.WALKO
+            elif r == 2 and not self.x <= screen_width * 0.1:
+                self.status = Status.WALKW
             else:
-                self.walko = False
-            if r == 2 and not self.x <= screen_width * 0.1:
-                self.walkw = True
-            else:
-                self.walkw = False
-            if r == 3:
-                self.stil = True
-            else:
-                self.stil = False
+                self.status = Status.IDLE
 
             self.timer = 0
 
@@ -42,14 +79,27 @@ class Player:
             self.y += 1
 
         if self.y == screen_height - self.size:
-            if self.walko:
+            if self.status == Status.WALKO:
                 self.x += 1
 
-            if self.walkw:
+            if self.status == Status.WALKW:
                 self.x -= 1
 
-    def draw(self, screen):
-        pygame.draw.rect(screen, self.color, (self.x, self.y, self.size, self.size))
+    def draw(self, screen: pygame.Surface):
+        image = pygame.transform.scale(
+            images["ice_kirby"][self.status][
+                self.frameCount % len(images["ice_kirby"][self.status])
+            ],
+            (self.size * 1.2, self.size * 1.2),
+        )
+
+        if self.status == Status.WALKW:
+            image = pygame.transform.flip(image, True, False)
+
+        screen.blit(
+            image,
+            (self.x, self.y),
+        )
 
 
 class Game:

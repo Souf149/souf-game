@@ -50,3 +50,8 @@ class Bot(commands.Bot):
     @commands.command()
     async def dragon(self, ctx: commands.Context):
         await ctx.send("Aashir is washed")
+
+    @commands.command()
+    async def nor(self, ctx: commands.Context):
+        await ctx.send("Nor is delulu KEKW")
+    
