@@ -39,7 +39,47 @@ images = {
             pygame.image.load("./souf_game/assets/ice_kirby/walk_3.png"),
             pygame.image.load("./souf_game/assets/ice_kirby/walk_4.png"),
         ],
-    }
+    },
+    "fire_kirby": {
+        Status.IDLE: [
+            pygame.image.load("./souf_game/assets/fire_kirby/idle_0.png"),
+            pygame.image.load("./souf_game/assets/fire_kirby/idle_0.png"),
+            pygame.image.load("./souf_game/assets/fire_kirby/idle_1.png"),
+            pygame.image.load("./souf_game/assets/fire_kirby/idle_1.png"),
+            pygame.image.load("./souf_game/assets/fire_kirby/idle_2.png"),
+            pygame.image.load("./souf_game/assets/fire_kirby/idle_2.png"),
+            pygame.image.load("./souf_game/assets/fire_kirby/idle_3.png"),
+            pygame.image.load("./souf_game/assets/fire_kirby/idle_3.png"),
+            pygame.image.load("./souf_game/assets/fire_kirby/idle_4.png"),
+            pygame.image.load("./souf_game/assets/fire_kirby/idle_4.png"),
+            pygame.image.load("./souf_game/assets/fire_kirby/idle_5.png"),
+            pygame.image.load("./souf_game/assets/fire_kirby/idle_5.png"),
+        ],
+        Status.WALKO: [
+            pygame.image.load("./souf_game/assets/fire_kirby/walk_0.png"),
+            pygame.image.load("./souf_game/assets/fire_kirby/walk_1.png"),
+            pygame.image.load("./souf_game/assets/fire_kirby/walk_2.png"),
+            pygame.image.load("./souf_game/assets/fire_kirby/walk_3.png"),
+            pygame.image.load("./souf_game/assets/fire_kirby/walk_4.png"),
+            pygame.image.load("./souf_game/assets/fire_kirby/walk_5.png"),
+            pygame.image.load("./souf_game/assets/fire_kirby/walk_6.png"),
+            pygame.image.load("./souf_game/assets/fire_kirby/walk_7.png"),
+            pygame.image.load("./souf_game/assets/fire_kirby/walk_8.png"),
+            pygame.image.load("./souf_game/assets/fire_kirby/walk_9.png"),
+        ],
+        Status.WALKW: [
+            pygame.image.load("./souf_game/assets/fire_kirby/walk_0.png"),
+            pygame.image.load("./souf_game/assets/fire_kirby/walk_1.png"),
+            pygame.image.load("./souf_game/assets/fire_kirby/walk_2.png"),
+            pygame.image.load("./souf_game/assets/fire_kirby/walk_3.png"),
+            pygame.image.load("./souf_game/assets/fire_kirby/walk_4.png"),
+            pygame.image.load("./souf_game/assets/fire_kirby/walk_5.png"),
+            pygame.image.load("./souf_game/assets/fire_kirby/walk_6.png"),
+            pygame.image.load("./souf_game/assets/fire_kirby/walk_7.png"),
+            pygame.image.load("./souf_game/assets/fire_kirby/walk_8.png"),
+            pygame.image.load("./souf_game/assets/fire_kirby/walk_9.png"),
+        ],
+    },
 }
 
 
@@ -54,6 +94,7 @@ class Player:
         self.lifetime = 0
         self.status = Status.IDLE
         self.frameCount = 0
+        self.sprite_name = "fire_kirby" if random.randint(0, 2) > 0 else "ice_kirby"
 
     def update(self, screen_width: int, screen_height: int) -> None:
         self.lifetime += 1
@@ -87,8 +128,8 @@ class Player:
 
     def draw(self, screen: pygame.Surface):
         image = pygame.transform.scale(
-            images["ice_kirby"][self.status][
-                self.frameCount % len(images["ice_kirby"][self.status])
+            images[self.sprite_name][self.status][
+                self.frameCount % len(images[self.sprite_name][self.status])
             ],
             (self.size * 1.2, self.size * 1.2),
         )

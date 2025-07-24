@@ -1,4 +1,5 @@
 from twitchio.ext import commands  # type: ignore
+from twitchio.ext.commands.core import Context  # type: ignore
 from souf_twitch_bot.clients.repos.db_client import DbClient
 from souf_twitch_bot.clients.repos.game_client import GameClient
 from souf_twitch_bot.config import settings
@@ -30,7 +31,7 @@ class Bot(commands.Bot):
         await self.handle_commands(message)
 
     @commands.command()
-    async def top(self, ctx: commands.Context):
+    async def top(self, ctx: Context):
         leaderboard_msg = "Leaderboard 🔥 | "
         for player_score in self.db_connection.get_top_5_players():
             leaderboard_msg += f"{player_score[0]}: {player_score[1]} --"
@@ -38,20 +39,19 @@ class Bot(commands.Bot):
         await ctx.send(leaderboard_msg)
 
     @commands.command()
-    async def score(self, ctx: commands.Context):
+    async def score(self, ctx: Context):
         player_score = self.db_connection.get_score_of_player(ctx.author.id)
 
         await ctx.send(f"{ctx.author.name}'s score is {player_score}")
 
     @commands.command()
-    async def ryan(self, ctx: commands.Context):
+    async def ryan(self, ctx: Context):
         await ctx.send("Ryan is kkr nep")
 
     @commands.command()
-    async def dragon(self, ctx: commands.Context):
+    async def dragon(self, ctx: Context):
         await ctx.send("Aashir is washed")
 
     @commands.command()
-    async def nor(self, ctx: commands.Context):
+    async def nor(self, ctx: Context):
         await ctx.send("Nor is delulu KEKW")
-    
